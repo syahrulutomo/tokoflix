@@ -5,7 +5,7 @@
       <input class="search" type="text" placeholder="search for a movie">
     </div>
      
-     <div v-for="movie in movies" v-bind:key='movie.orderNumber' class="movie-mobile">
+    <div v-for="movie in filteredData" v-bind:key='movie.orderNumber' class="movie-mobile">
        <div class="poster-wrapper-mobile">
          <img class="poster-mobile" :src="movie.poster_mobile">
        </div>
@@ -18,7 +18,11 @@
        <p v-if=" sudahPunya === true" class="indikator-mobile" v-bind:class="{ punya:sudahPunya }"><img class="check" :src="images.check"> 
        sudah punya </p>
        <p v-else-if=" sudahPunya === false" class="indikator-mobile"> belum punya </p>
-     </div>
+    </div>
+
+    <div class="page-wrapper-mobile">
+        <button class="page-prev-mobile" v-on:click="decreasePage()">Previous</button> <button class="page-next-mobile" v-on:click="increasePage()">Next</button>
+    </div>
 
   </div>
 
@@ -28,20 +32,25 @@
       <input class="search" type="text" placeholder="search for a movie">
     </div>
 
-    <div v-for="movie in movies" v-bind:key='movie.orderNumber' class="movie-tablet"> 
-       <div class="poster-wrapper-tablet">
+    <div v-for="movie in filteredData" v-bind:key='movie.orderNumber' class="movie-tablet"> 
+      <div class="poster-wrapper-tablet">
          <img class="poster-tablet" :src="movie.poster_mobile">
-       </div>
-       <p class="title-tablet">{{ movie.title }}</p>
-       <p class="price-tablet"> {{ movie.priceText }} </p>
-       <div class="rating-wrapper-tablet">
+      </div>
+      <p class="title-tablet">{{ movie.title }}</p>
+      <p class="price-tablet"> {{ movie.priceText }} </p>
+      <div class="rating-wrapper-tablet">
          <img class="star" :src="images.star" :alt="movie.title">
          <p class="rating-tablet"> {{ movie.vote_average }} </p>
-       </div>
-        <p v-if=" sudahPunya === true" class="indikator-tablet" v-bind:class="{ punya:sudahPunya }"><img class="check" :src="images.check"> 
+      </div>
+      <p v-if=" sudahPunya === true" class="indikator-tablet" v-bind:class="{ punya:sudahPunya }"><img class="check" :src="images.check"> 
        sudah punya </p>
-       <p v-else-if=" sudahPunya === false" class="indikator-tablet"> belum punya </p>
-     </div>
+      <p v-else-if=" sudahPunya === false" class="indikator-tablet"> belum punya </p>
+    </div>
+
+    <div class="page-wrapper-tablet">
+      <button class="page-prev-tablet" v-on:click="decreasePage()">Previous</button> <button class="page-next-tablet" v-on:click="increasePage()">Next</button>
+    </div>
+
   </div>
 
   <div class="container home-container-desktop" v-else-if="$mq === 'desktop'">
@@ -50,7 +59,7 @@
       <input class="search" type="text" placeholder="search for a movie">
     </div>
 
-    <div v-for="movie in movies" v-bind:key='movie.orderNumber' class="movie-desktop">
+    <div v-for="movie in filteredData" v-bind:key='movie.orderNumber' class="movie-desktop">
        <div class="poster-wrapper-desktop">
          <img class="poster-desktop" :src="movie.poster_desktop">
        </div>
@@ -64,6 +73,10 @@
        sudah punya </p>
        <p v-else-if=" sudahPunya === false" class="indikator-desktop"> belum punya </p>
      </div>
+      <div class="page-wrapper-desktop">
+        <button class="page-prev-desktop" v-on:click="decreasePage()">Previous</button> <button class="page-next-desktop" v-on:click="increasePage()">Next</button>
+      </div>
+     
   </div>
  
 </template>
@@ -91,7 +104,14 @@ export default {
         search: require('./../assets/search.png'),
         check: require('./../assets/check.png')
       },
-      sudahPunya: false
+      sudahPunya: false,
+      pageNumber: 1
+    }
+  },
+  computed:{
+    filteredData: function(){
+      let beginIndex =  this.pageNumber * 18 - 1 - 17;
+      return this.movies.slice(beginIndex , this.pageNumber * 18 )
     }
   },
   mounted: function(){
@@ -142,13 +162,18 @@ export default {
             item['price'] = harga;
             self.movies.push(item);
           }) 
-
          
         }).catch( err => {
             throw err;
         })
-      }
-
+      }   
+  }, methods:{
+    increasePage: function(){
+      this.pageNumber++;
+    },
+    decreasePage: function(){
+      this.pageNumber--;
+    }
   }
 }
 </script>
@@ -262,11 +287,56 @@ export default {
     text-align: left;
   }
   
-  .punya{
-    color: #5EDB4B;
+   .page-wrapper-mobile{
+    position: relative;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
+  .page-prev-mobile{
+    margin-right: 5%;
+    width: 6rem;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+  }
+
+  .page-prev-mobile:hover{
+    cursor: pointer;
+  }
+
+  .page-next-mobile{
+    margin-left: 5%;
+    width: 6rem;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+  }
+
+  .page-next-mobile:hover{
+    cursor: pointer;
+  }
+  
+
   /* tablet */
+
   .movie-tablet{
     width: calc((100% - 1.5rem)/2);
     margin-right: 1.5rem; 
@@ -345,6 +415,55 @@ export default {
     letter-spacing: normal;
     text-align: left;
   }
+
+  .page-wrapper-tablet{
+    position: relative;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem 2rem;
+  }
+
+  .page-prev-tablet{
+    margin-right: 15%;
+    width: 6rem;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+  }
+
+  .page-prev-tablet:hover{
+    cursor: pointer;
+  }
+
+  .page-next-tablet{
+    margin-left: 15%;
+    width: 6rem;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+  }
+
+  .page-next-tablet:hover{
+    cursor: pointer;
+  }
+
 
   /* desktop */
 
@@ -427,8 +546,61 @@ export default {
     text-align: left;
   }
 
+  .page-wrapper-desktop{
+    position: relative;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem 2rem;
+  }
+
+  .page-prev-desktop{
+    margin-right: 30%;
+    width: 6rem;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+  }
+
+  .page-prev-desktop:hover{
+    cursor: pointer;
+  }
+
+  .page-next-desktop{
+    margin-left: 30%;
+    width: 6rem;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+  }
+
+  .page-next-desktop:hover{
+    cursor: pointer;
+  }
+
   .movie-mobile:hover , .movie-tablet:hover, .movie-desktop:hover{
     cursor: pointer;
-    opacity: .8;
+    opacity: .9;
   }
+
+  .punya{
+    color: #5EDB4B;
+  }
+  
 </style>
