@@ -140,7 +140,6 @@ div, footer, nav{
 .navbar-expanded {
 	width: 100%;
 	padding: .8rem 1rem;
-  margin-top: -1.25em;
   background-color: #f4f4f4;
   position: fixed;
   z-index: 98;
