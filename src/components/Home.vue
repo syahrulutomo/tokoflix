@@ -21,7 +21,12 @@
     </div>
 
     <div class="page-wrapper-mobile">
-        <button class="page-prev-mobile" v-on:click="decreasePage()">Previous</button> <button class="page-next-mobile" v-on:click="increasePage()">Next</button>
+      <router-link v-bind:to="'/?page='+this.pageParam">
+        <button class="page-prev-mobile" v-on:click="decreasePage()">Previous</button>
+      </router-link>
+      <router-link v-bind:to="'/?page='+this.pageParam">  
+        <button class="page-next-mobile" v-on:click="increasePage()">Next</button>
+      </router-link>
     </div>
 
   </div>
@@ -48,7 +53,12 @@
     </div>
 
     <div class="page-wrapper-tablet">
-      <button class="page-prev-tablet" v-on:click="decreasePage()">Previous</button> <button class="page-next-tablet" v-on:click="increasePage()">Next</button>
+      <router-link v-bind:to="'/?page='+this.pageParam">
+        <button class="page-prev-tablet" v-on:click="decreasePage()">Previous</button> 
+      </router-link>
+      <router-link v-bind:to="'/?page='+this.pageParam">  
+        <button class="page-next-tablet" v-on:click="increasePage()">Next</button>
+      </router-link>
     </div>
 
   </div>
@@ -74,9 +84,14 @@
        <p v-else-if=" sudahPunya === false" class="indikator-desktop"> belum punya </p>
      </div>
       <div class="page-wrapper-desktop">
-        <button class="page-prev-desktop" v-on:click="decreasePage()">Previous</button> <button class="page-next-desktop" v-on:click="increasePage()">Next</button>
+        <router-link v-bind:to="'/?page='+this.pageParam">
+          <button class="page-prev-desktop" v-on:click="decreasePage()">Previous</button>
+        </router-link>
+        <router-link v-bind:to="'/?page='+this.pageParam">
+          <button class="page-next-desktop" v-on:click="increasePage()">Next</button>
+        </router-link>
       </div>
-     
+
   </div>
  
 </template>
@@ -105,7 +120,8 @@ export default {
         check: require('./../assets/check.png')
       },
       sudahPunya: false,
-      pageNumber: 1
+      pageNumber: 1,
+      pageParam: 1
     }
   },
   computed:{
@@ -115,13 +131,13 @@ export default {
     }
   },
   mounted: function(){
-
+    
     let self = this;
     let counter = 0;
 
       // fetch movies data from list id 1 to 20 on page 1
       for(let i = 1; i <= 20; i++){
-        fetch('https://api.themoviedb.org/4/list/'+i+'?page=1&api_key='+this.apiKey+'&sort_by=vote_average.desc')
+        fetch("https://api.themoviedb.org/3/discover/movie?api_key="+this.apiKey+"&language=en-US&region=id&sort_by=release_date.desc&page="+i+"&vote_average.gte=7")
         .then(function(response){
           return response.json();
         })
@@ -167,12 +183,17 @@ export default {
             throw err;
         })
       }   
-  }, methods:{
+  },
+  updated: function(){
+    let self = this;
+    self.pageParam = self.pageNumber+1;
+  }, 
+  methods:{
     increasePage: function(){
-      this.pageNumber++;
+      ++this.pageNumber;
     },
     decreasePage: function(){
-      this.pageNumber--;
+      --this.pageNumber;
     }
   }
 }
@@ -317,7 +338,7 @@ export default {
   }
 
   .page-next-mobile{
-    margin-left: 5%;
+    margin-left: 1.5rem;
     width: 6rem;
     color: #fff;
     background-color: #343a40;
@@ -447,7 +468,7 @@ export default {
   }
 
   .page-next-tablet{
-    margin-left: 15%;
+    margin-left: 6rem;
     width: 6rem;
     color: #fff;
     background-color: #343a40;
@@ -577,7 +598,7 @@ export default {
   }
 
   .page-next-desktop{
-    margin-left: 30%;
+    margin-left: 20rem;
     width: 6rem;
     color: #fff;
     background-color: #343a40;
