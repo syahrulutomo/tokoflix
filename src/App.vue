@@ -2,7 +2,7 @@
   <div id="app">
 
     <!-- Menu collapse -->
-    <div v-bind:class="{ open: isOpen }" class="navbar-expanded" v-if="$mq === 'mobile'">
+    <div v-bind:class="{ open: isOpen }" class="navbar-expanded" v-if="$mq === 'mobile' || $mq === 'tablet'">
 			<ul class="menu-expanded">
 					<li class="menu-list-expanded"><a class="menu-item-expanded" href="#">Discover</a></li>
 					<li class="menu-list-expanded"><a class="menu-item-expanded" href="#">Genres</a></li>
@@ -12,7 +12,7 @@
 
     <!-- Navbar -->
     <div class="header">
-			<a class="logo" href="#" v-if="$mq === 'mobile'">Tokoflix</a>
+			<a class="logo" href="#" v-if="$mq === 'mobile' || $mq === 'tablet'">Tokoflix</a>
       <a class="logoBig" href="#" v-if="$mq === 'desktop'">Tokoflix</a>
 			<nav class="navbar">
 				<ul class="menu" v-if="$mq === 'desktop'">
@@ -22,7 +22,7 @@
 				</ul>			
 			</nav>
 				<a id="drawer" href="#"><img :src="images.drawerImg" v-on:click="showNavbarExpanded" 
-        v-if="$mq === 'mobile'"></a>
+        v-if="$mq === 'mobile' || $mq === 'tablet'"></a>
     </div>
 
     <Home/>
@@ -37,8 +37,9 @@ import VueMq from 'vue-mq'
 
 Vue.use(VueMq, {
   breakpoints: {
-    mobile: 800,
-    desktop: Infinity,
+    mobile: 500,
+    tablet: 800,
+    desktop: 1200,
   }
 })
 
@@ -77,7 +78,7 @@ html, body{
 }
 
 #app{
-  margin-top: 80px; 
+  margin-top: 60px; 
 }
 
 div, footer, nav{
@@ -94,7 +95,8 @@ div, footer, nav{
   background-color: #f4f4f4;
   border-bottom: 1px solid #d9d9d9;
   display: flex;
-  flex-wrap: wrap;    
+  flex-wrap: wrap; 
+  z-index: 99;   
 }
 
 .logo{
@@ -114,9 +116,9 @@ div, footer, nav{
 }
 
 .navbar{
- margin-left: 16%;
-    padding: 0 1em;
-    vertical-align: baseline;
+  margin-left: 16%;
+  padding: 0 1em;
+  vertical-align: baseline;
 }
 
 .menu{
@@ -141,7 +143,7 @@ div, footer, nav{
   margin-top: -1.25em;
   background-color: #f4f4f4;
   position: fixed;
-  z-index: 3;
+  z-index: 98;
   /* This trasform moves the drawer off canvas. */
   -webkit-transform: translate(0px, -200px);
   transform: translate(0px, -200px);
