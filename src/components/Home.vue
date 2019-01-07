@@ -48,10 +48,10 @@
       <p v-else-if=" movie.indikator === false" class="indikator-tablet"> belum punya </p>
     </div>
     <div class="page-wrapper-tablet">
-      <router-link v-bind:to="'/?page='+this.pageParam">
+      <router-link v-bind:to="'/?page='+this.prevPage">
         <button class="page-prev-tablet" v-on:click="decreasePage()">Previous</button> 
       </router-link>
-      <router-link v-bind:to="'/?page='+this.pageParam">  
+      <router-link v-bind:to="'/?page='+this.nextPage">  
         <button class="page-next-tablet" v-on:click="increasePage()">Next</button>
       </router-link>
     </div>
@@ -77,10 +77,10 @@
        <p v-else-if=" movie.indikator === false" class="indikator-desktop"> belum punya </p>
      </div>
       <div class="page-wrapper-desktop">
-        <router-link v-bind:to="'/?page='+this.pageParam">
+        <router-link v-bind:to="'/?page='+this.prevPage">
           <button class="page-prev-desktop" v-on:click="decreasePage()">Previous</button>
         </router-link>
-        <router-link v-bind:to="'/?page='+this.pageParam">
+        <router-link v-bind:to="'/?page='+this.nextPage">
           <button class="page-next-desktop" v-on:click="increasePage()">Next</button>
         </router-link>
       </div>
@@ -223,12 +223,8 @@ export default {
     sendData: function(){
         let id = event.currentTarget.getAttribute('data-id');
         localStorage.setItem('movieId',id);
-        let punya = event.currentTarget.getAttribute('data-indikator');
-        if(punya === null){
-          localStorage.setItem('indikator',false);
-        }else if(punya === true){
-          localStorage.setItem('indikator',true);
-        }
+        let punya = event.currentTarget.getAttribute('data-punya');
+        localStorage.setItem('indikator',punya);
     }
   }
 }

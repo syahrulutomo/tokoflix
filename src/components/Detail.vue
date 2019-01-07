@@ -221,7 +221,7 @@ export default {
       
       if(punya === 'true'){
          punyaText = 'sudah punya';
-      }else if(punya === 'false'){
+      }else if(punya === 'null'){
           punyaText = 'belum punya';
       }
       self.indikator = punyaText;
@@ -289,7 +289,9 @@ export default {
         }).then(function(data){
 
             if(data['results'].length > 0){
-                data['results'].forEach(function(item){
+                let list = data['results'].slice(0,6);
+
+                list.forEach(function(item){
 
                     item['poster_mobile'] = 'https://image.tmdb.org/t/p/w500'+item['poster_path'];
                     item['poster_desktop'] = 'https://image.tmdb.org/t/p/original'+item['poster_path'];
@@ -364,7 +366,9 @@ export default {
         }).then(function(data){
 
             if(data['results'].length > 0){
-                data['results'].forEach(function(item){
+                let list = data['results'].slice(0,6);
+                
+                list.forEach(function(item){
 
                     item['poster_mobile'] = 'https://image.tmdb.org/t/p/w500'+item['poster_path'];
                     item['poster_desktop'] = 'https://image.tmdb.org/t/p/original'+item['poster_path'];
@@ -461,7 +465,6 @@ export default {
     /* mobile */
     
     .detail-container-mobile{
-        margin-top: 5rem;
         padding: 0 1.5rem;
     }
 
@@ -722,7 +725,6 @@ export default {
     /* tablet */
 
     .detail-container-tablet{
-        margin-top: 5rem;
         padding: 0 2.5rem;
     }
 

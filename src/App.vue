@@ -173,8 +173,8 @@ div, footer, nav{
 }
 
 .open {
-  -webkit-transform: translate(0, 0px);
-  transform: translate(0, 0px);
+  -webkit-transform: translate(0px, 0px);
+  transform: translate(0px, 0px);
 }
 
 .drawer{
