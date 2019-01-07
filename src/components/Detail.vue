@@ -235,7 +235,6 @@ export default {
       .then(function(response){
         return response.json();
       }).then(function(data){
-          console.log(data);
         self.title = data['title'];
         self.posterMobile = 'https://image.tmdb.org/t/p/w500'+data['poster_path'];
         self.posterOriginal = 'https://image.tmdb.org/t/p/original'+data['poster_path'];
@@ -319,6 +318,42 @@ export default {
 
                     self.recomends.push(item);
                 })
+            }else{
+                fetch('https://api.themoviedb.org/3/movie/top_rated?api_key='+self.apiKey+'&language=en-US&page=1&region=id')
+                .then(function(response){
+                    return response.json()
+                }).then(function(data){
+                    let list = data['results'].slice(0,6);
+
+                    list.forEach(function(item){
+                        item['poster_mobile'] = 'https://image.tmdb.org/t/p/w500'+item['poster_path'];
+                        item['poster_desktop'] = 'https://image.tmdb.org/t/p/original'+item['poster_path'];
+
+                        let harga = 0;
+                        if( item['vote_average'] >= 0 && item['vote_average'] <= 3 ){
+                            harga =  3500;
+                        }else if( item['vote_average'] > 3 && item['vote_average'] <= 6 ){
+                            harga =  8250;
+                        }else if( item['vote_average'] > 6 && item['vote_average'] <= 8 ){
+                            harga =  16350;
+                        }else if( item['vote_average'] > 8 && item['vote_average'] <= 10 ){
+                            harga =  21250;
+                        }
+
+                        function numberToText(x) {
+                            x = x.toString();
+                            let pattern = /(-?\d+)(\d{3})/;
+                            while (pattern.test(x))
+                                x = x.replace(pattern, "$1.$2");
+                                x = 'Rp. '+x;
+                            return x;
+                        }
+                        item['priceText'] =  numberToText(harga);
+                        item['price'] = harga;
+
+                        self.recomends.push(item);
+                    })
+                })
             }
             
         })
@@ -359,7 +394,48 @@ export default {
                     self.similars.push(item);
                 })
             }else{
-                fetch('')
+                let genreStr = self.genres[0]['id'];
+
+                for(let i = 1; i < self.genres.length; i++){
+                    genreStr = genreStr +'%2C'+ self.genres[0]['id']
+                }
+
+                fetch('https://api.themoviedb.org/3/discover/movie?api_key='+self.apiKey+'&language=en-US&region=id&sort_by=release_date.desc&page=1&release_date.gte=2018-10-1&vote_average.gte=1&with_genres='+genreStr)
+                .then(function(response){
+                    return response.json();
+                }).then(function(data){
+
+                    let list = data['results'].slice(0,6);
+                    list.forEach(function(item){
+
+                        item['poster_mobile'] = 'https://image.tmdb.org/t/p/w500'+item['poster_path'];
+                        item['poster_desktop'] = 'https://image.tmdb.org/t/p/original'+item['poster_path'];
+
+                        let harga = 0;
+                        if( item['vote_average'] >= 0 && item['vote_average'] <= 3 ){
+                            harga =  3500;
+                        }else if( item['vote_average'] > 3 && item['vote_average'] <= 6 ){
+                            harga =  8250;
+                        }else if( item['vote_average'] > 6 && item['vote_average'] <= 8 ){
+                            harga =  16350;
+                        }else if( item['vote_average'] > 8 && item['vote_average'] <= 10 ){
+                            harga =  21250;
+                        }
+
+                        function numberToText(x) {
+                            x = x.toString();
+                            let pattern = /(-?\d+)(\d{3})/;
+                            while (pattern.test(x))
+                                x = x.replace(pattern, "$1.$2");
+                                x = 'Rp. '+x;
+                            return x;
+                        }
+                        item['priceText'] =  numberToText(harga);
+                        item['price'] = harga;
+
+                        self.similars.push(item);
+                    })
+                })
             }
         })
        
@@ -550,7 +626,7 @@ export default {
 
     .poster-same-mobile{
         width: 100%;
-        height: 50vh;
+        height: 40vh;
     }
 
     .title-same-mobile{
@@ -612,7 +688,7 @@ export default {
 
     .poster-recomend-mobile{
         width: 100%;
-        height: 50vh;
+        height: 40vh;
     }
 
     .title-recomend-mobile{
@@ -873,7 +949,7 @@ export default {
 
     .poster-recomend-tablet{
         width: 100%;
-        height: 60vh;
+        height: 50vh;
     }
 
     .title-recomend-tablet{
@@ -1054,15 +1130,15 @@ export default {
     }
 
     .same-desktop{
-        width: calc((100% - 1rem)/ 2);
-        margin-right: 1rem;
-        margin-bottom: 1.2rem;
+        width: calc((100% - 2rem)/ 2);
+        margin-right: 2rem;
+        margin-bottom: 1.5rem;
         padding: .5rem;
         border: 1px solid #e0e0e0;
         border-radius: 3px;
     }
 
-    .same-tablet:nth-of-type(2n){
+    .same-desktop:nth-of-type(2n){
         margin-right: 0;
     }
 
@@ -1072,7 +1148,7 @@ export default {
 
     .poster-same-desktop{
         width: 100%;
-        height: 50vh;
+        height: 70vh;
     }
 
     .title-same-desktop{
@@ -1134,7 +1210,7 @@ export default {
 
     .poster-recomend-desktop{
         width: 100%;
-        height: 60vh;
+        height: 70vh;
     }
 
     .title-recomend-desktop{

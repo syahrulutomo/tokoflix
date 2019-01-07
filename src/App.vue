@@ -21,7 +21,7 @@
 					<li class="menu-list"><a class="menu-item" href="#">Companies</a></li>
 				</ul>			
 			</nav>
-        <router-link to="user"><img class="user-icon" :src="images.userIcon"></router-link>
+       <img class="user-icon" :src="images.userIcon">
 				<a id="drawer" href="#"><img :src="images.drawerImg" v-on:click="showNavbarExpanded" 
         v-if="$mq === 'mobile' || $mq === 'tablet'"></a>
     </div>
