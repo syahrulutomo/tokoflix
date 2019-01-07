@@ -12,8 +12,8 @@
 
     <!-- Navbar -->
     <div class="header">
-			<a class="logo" href="#" v-if="$mq === 'mobile' || $mq === 'tablet'">Tokoflix</a>
-      <a class="logoBig" href="#" v-if="$mq === 'desktop'">Tokoflix</a>
+			<router-link to="/"><a class="logo" href="#" v-if="$mq === 'mobile' || $mq === 'tablet'">Tokoflix</a></router-link>
+      <router-link to="/"><a class="logoBig" href="#" v-if="$mq === 'desktop'">Tokoflix</a></router-link>
 			<nav class="navbar">
 				<ul class="menu" v-if="$mq === 'desktop'">
 					<li class="menu-list"><a class="menu-item" href="#">Discover</a></li>
@@ -21,17 +21,17 @@
 					<li class="menu-list"><a class="menu-item" href="#">Companies</a></li>
 				</ul>			
 			</nav>
+        <router-link to="user"><img class="user-icon" :src="images.userIcon"></router-link>
 				<a id="drawer" href="#"><img :src="images.drawerImg" v-on:click="showNavbarExpanded" 
         v-if="$mq === 'mobile' || $mq === 'tablet'"></a>
     </div>
 
-    <Home/>
+    <router-view></router-view>
  
   </div>
 </template>
 
 <script>
-import Home from './components/Home.vue'
 import Vue from 'vue'
 import VueMq from 'vue-mq'
 
@@ -46,12 +46,13 @@ Vue.use(VueMq, {
 export default {
   name: 'app',
   components: {
-    Home
+    
   },
   data(){
     return{
       images:{
-        drawerImg: require('./assets/menu-burger.png')
+        drawerImg: require('./assets/menu-burger.png'),
+        userIcon: require('./assets/user.png')
       },
       isOpen: false
     }
@@ -84,6 +85,10 @@ html, body{
 div, footer, nav{
 	box-sizing: border-box;
   margin: 0;
+}
+
+.router-link-active{
+  text-decoration: none;
 }
 
 .header{
@@ -183,5 +188,12 @@ div, footer, nav{
 	right: 10px;	
 }
 
+.user-icon{
+  width: 30px;
+  height: 30px;
+  position: fixed;
+  top: .8rem;
+  right: 3.5rem;
+}
 
 </style>
