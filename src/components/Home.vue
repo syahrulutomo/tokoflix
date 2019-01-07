@@ -19,10 +19,10 @@
        <p v-else-if=" movie.indikator === false" class="indikator-mobile"> belum punya </p>
     </div>
     <div class="page-wrapper-mobile">
-      <router-link v-bind:to="'/?page='+this.pageParam">
+      <router-link v-bind:to="'/?page='+this.prevPage">
         <button class="page-prev-mobile" v-on:click="decreasePage()">Previous</button>
       </router-link>
-      <router-link v-bind:to="'/?page='+this.pageParam">  
+      <router-link v-bind:to="'/?page='+this.nextPage">  
         <button class="page-next-mobile" v-on:click="increasePage()">Next</button>
       </router-link>
     </div>
@@ -106,7 +106,7 @@ export default {
     return{
       apiKey: 'c6d705fa0fcbcfbebd83c899a86bbcfb',
       movies: [],
-      collection: [ ],
+      collection: [],
       images:{
         star: require('./../assets/star.png'),
         search: require('./../assets/search.png'),
@@ -129,6 +129,14 @@ export default {
           text = text.replace(pattern, "$1.$2");
           text = 'Rp. '+text;
           return text;
+    },
+    nextPage: function(){
+      let next = this.pageNumber;
+      return next+1;
+    },
+    prevPage: function(){
+      let prev = this.pageNumber;
+      return prev-1;
     }
   },
   mounted: function(){
@@ -205,10 +213,6 @@ export default {
             throw err;
     })
   },
-  updated: function(){
-    let self = this;
-    self.pageParam = self.pageNumber+1;
-  }, 
   methods:{
     increasePage: function(){
       ++this.pageNumber;
